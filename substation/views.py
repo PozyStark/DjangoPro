@@ -17,6 +17,8 @@ def number(response, num):
     if num > 5:
         return redirect("home", permanent=False)
 
+    print('Hello')
+
     return HttpResponse(f"<h1> Number {num} </h1>")
 
 
