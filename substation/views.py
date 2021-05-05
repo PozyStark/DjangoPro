@@ -5,28 +5,40 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from substation.models import Testing
 
-menu = ['баранина', 'говядина', 'кролик', 'рыба', 'курица', 'свинина']
-posts = Testing.objects.all()
+menu = [
+    {'title': "О сайте", 'url_name': 'about'},
+    {'title': "Добавить статью", 'url_name': 'add_page'},
+    {'title': "Обратная связь", 'url_name': 'contact'},
+    {'title': "Войти", 'url_name': 'login'}
+]
+
 
 def index(response):
-    return render(response, 'substation/index.html', {'title': 'Главная страница', 'posts': posts, 'menu': menu})
+    posts = Testing.objects.all()
+    context = {'title': 'Главная страница',
+               'menu': menu,
+               'posts': posts}
+    return render(response, 'substation/index.html', context)
 
 
 def about(response):
-    return render(response, 'substation/about.html', {'title' : 'О нас', 'posts': posts})
+    return render(response, 'substation/about.html', {'title' : 'О нас', 'menu': menu})
 
 
-def number(response, num):
+def add_page(request):
+    return HttpResponse("add_page")
 
-    if response.POST:
-        print(response.POST)
 
-    if num > 5:
-        return redirect("home", permanent=False)
+def contact(request):
+    return HttpResponse("contact")
 
-    print('Hello')
 
-    return HttpResponse(f"<h1> Number {num} </h1>")
+def login(request):
+    return HttpResponse("login")
+
+
+def show_post(request, post_id):
+    return HttpResponse(f"Post id_{post_id}")
 
 
 def pageNotFound(response, exception):

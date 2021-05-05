@@ -1,9 +1,12 @@
 from django.urls import path
 
-from substation.views import index, number, about
+from substation.views import index, about, add_page, contact, login, show_post
 
 urlpatterns = [
     path('', index, name="home"),
     path('about/', about, name='about'),
-    path('number/<int:num>', number)
+    path('addpage/', add_page, name="add_page"),
+    path('contact/', contact, name="contact"),
+    path('login/', login, name="login"),
+    path('post/<int:post_id>', show_post, name="post")
 ]
