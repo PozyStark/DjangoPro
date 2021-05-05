@@ -3,10 +3,17 @@ from django.shortcuts import render, redirect
 
 
 # Create your views here.
+from substation.models import Testing
 
+menu = ['баранина', 'говядина', 'кролик', 'рыба', 'курица', 'свинина']
+posts = Testing.objects.all()
 
 def index(response):
-    return HttpResponse("<h1>Hello</h1>")
+    return render(response, 'substation/index.html', {'title': 'Главная страница', 'posts': posts, 'menu': menu})
+
+
+def about(response):
+    return render(response, 'substation/about.html', {'title' : 'О нас', 'posts': posts})
 
 
 def number(response, num):
