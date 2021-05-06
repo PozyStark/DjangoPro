@@ -22,7 +22,7 @@ def index(response):
 
 
 def about(response):
-    return render(response, 'substation/about.html', {'title' : 'О нас', 'menu': menu})
+    return render(response, 'substation/about.html', {'title': 'О нас', 'menu': menu})
 
 
 def add_page(request):
