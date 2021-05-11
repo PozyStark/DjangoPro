@@ -21,11 +21,12 @@ def about(response):
 
 def add_page(response):
     if response.method == 'POST':
-        form = AddPostForm(response.POST)
+        form = AddPostForm(response.POST, response.FILES)
         if form.is_valid():
             print(form.cleaned_data)
             try:
-                Testing.objects.create(**form.cleaned_data)
+                # Testing.objects.create(**form.cleaned_data)
+                form.save()
                 return redirect('home')
             except:
                 form.add_error(None, 'Ошибка добавления поста')
