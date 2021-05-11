@@ -1,6 +1,5 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-
+from django.http import HttpResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from substation.models import Testing, Category
@@ -31,12 +30,19 @@ def login(response):
     return HttpResponse("login")
 
 
-def show_post(response, post_id):
-    return HttpResponse(f"Post id_{post_id}")
+def show_post(response, post_slug):
+    post = get_object_or_404(Testing, slug=post_slug)
+    context = {'title': post.title,
+               'post': post,
+               'cat_selected': post.cat_id}
+    return render(response, 'substation/post.html', context=context)
 
 
 def show_category(response, cat_id):
     posts = Testing.objects.filter(cat_id=cat_id)
+
+    if len(posts) == 0:
+        raise Http404()
 
     context = {'title': 'Отображение по рубрикам',
                'posts': posts,
