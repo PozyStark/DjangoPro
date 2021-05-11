@@ -2,7 +2,8 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
-from substation.models import Testing, Category
+from substation.forms import *
+from substation.models import *
 
 
 def index(response):
@@ -19,7 +20,18 @@ def about(response):
 
 
 def add_page(response):
-    return render(response, 'substation/addpage.html', {'title': 'Добавление статьи'})
+    if response.method == 'POST':
+        form = AddPostForm(response.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            try:
+                Testing.objects.create(**form.cleaned_data)
+                return redirect('home')
+            except:
+                form.add_error(None, 'Ошибка добавления поста')
+    else:
+        form = AddPostForm()
+    return render(response, 'substation/addpage.html', {'form': form, 'title': 'Добавление статьи'})
 
 
 def contact(response):
