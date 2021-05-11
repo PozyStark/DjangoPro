@@ -19,7 +19,7 @@ def about(response):
 
 
 def add_page(response):
-    return HttpResponse("add_page")
+    return render(response, 'substation/addpage.html', {'title': 'Добавление статьи'})
 
 
 def contact(response):
