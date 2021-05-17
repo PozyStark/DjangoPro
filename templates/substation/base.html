@@ -13,15 +13,23 @@
 <body>
 <table class="table-page" border=0 cellpadding="0" cellspacing="0">
 <tr><td valign=top>
-{% block mainmenu %}
-    <div class="header">
-        <ul id="mainmenu" class="mainmenu">
-        <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
-            {% show_menu_items %}
-        </ul>
-        <div class="clear"></div>
-    </div>
-{% endblock mainmenu %}
+{#Menu working#}
+<div class="header">
+    <ul id="mainmenu" class="mainmenu">
+    <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
+{#            {% show_menu_items %}#}
+        {% block mainmenu %}
+        {% for m in menu %}
+            {% if not forloop.last %}
+                    <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+            {% else %}
+                    <li class="last"><a href="{% url m.url_name %}">{{m.title}}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% endblock mainmenu %}
+    </ul>
+    <div class="clear"></div>
+</div>
 
 
 <table class="table-content" border=0 cellpadding="0" cellspacing="0">
@@ -36,6 +44,7 @@
         {% endif %}
 
     {% show_categories 'name' cat_selected %}
+
 {#        {% for c in categories %}#}
 {#            {% if c.pk == cat_selected %}#}
 {#                <li class="selected">{{ c.name }}</li>#}
