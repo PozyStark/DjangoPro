@@ -1,3 +1,5 @@
+from django.db.models import Count
+
 from substation.models import Category
 
 menu = [
@@ -9,9 +11,12 @@ menu = [
 
 
 class DataMixin:
+
+    paginate_by = 3
+
     def get_user_context(self, **kwargs):
         context = kwargs
-        cats = Category.objects.all()
+        cats = Category.objects.annotate(Count('testing'))
 
         user_menu = menu.copy()
         if not self.request.user.is_authenticated:

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -20,6 +21,7 @@ menu = [
 
 
 class TestingHome(DataMixin, ListView):
+    # paginate_by = 3
     model = Testing
     template_name = 'substation/index.html'
     context_object_name = 'posts'
@@ -43,7 +45,11 @@ class TestingHome(DataMixin, ListView):
 
 
 def about(response):
-    return render(response, 'substation/about.html', {'title': 'О нас'})
+    contact_list = Testing.objects.all()
+    paginator = Paginator(contact_list, 3)
+    page_number = response.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(response, 'substation/about.html', {'page_obj': page_obj, 'menu': menu, 'title': 'О нас'})
 
 
 class AddPage(LoginRequiredMixin, DataMixin, CreateView):
@@ -105,6 +111,7 @@ class ShowPost(DataMixin, DetailView):
 
 
 class TestingCategory(DataMixin, ListView):
+    # paginate_by = 3
     model = Testing
     template_name = 'substation/index.html'
     context_object_name = 'posts'
