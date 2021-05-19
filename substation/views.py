@@ -1,3 +1,4 @@
+
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -42,6 +43,17 @@ class TestingHome(DataMixin, ListView):
 #                'posts': posts,
 #                'cat_selected': 0}
 #     return render(response, 'substation/index.html', context)
+
+
+class RegisterUser(DataMixin, CreateView):
+    form_class = RegisterUserForm
+    template_name = 'substation/registration.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Регистрациая пользователя')
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 def about(response):
