@@ -1,4 +1,5 @@
-
+from django.contrib.auth import logout, login
+from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -45,15 +46,38 @@ class TestingHome(DataMixin, ListView):
 #     return render(response, 'substation/index.html', context)
 
 
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm
+    template_name = 'substation/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Авторизация пользователя')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+
 class RegisterUser(DataMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'substation/registration.html'
     success_url = reverse_lazy('login')
 
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
+
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Регистрациая пользователя')
         return dict(list(context.items()) + list(c_def.items()))
+
+
+def logout_user(response):
+    logout(response)
+    return redirect('login')
 
 
 def about(response):
@@ -94,10 +118,6 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
 
 def contact(response):
     return HttpResponse("contact")
-
-
-def login(response):
-    return HttpResponse("login")
 
 
 class ShowPost(DataMixin, DetailView):
