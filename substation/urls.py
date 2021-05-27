@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from substation.views import TestingHome, about, AddPage, contact, TestingCategory, ShowPost, RegisterUser, \
     LoginUser, logout_user

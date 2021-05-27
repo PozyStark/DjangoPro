@@ -35,7 +35,7 @@ class TestingHome(DataMixin, ListView):
         return context
 
     def get_queryset(self):
-        return Testing.objects.filter(is_published=True)
+        return Testing.objects.filter(is_published=True).select_related('cat')
 
 # def index(response):
 #     posts = Testing.objects.all()
@@ -154,7 +154,8 @@ class TestingCategory(DataMixin, ListView):
         # context['menu'] = menu
         # context['title'] = 'Категория-' + str(context['posts'][0].cat)
         # context['cat_selected'] = context['posts'][0].cat_id
-        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat), cat_selected=context['posts'][0].cat_id)
+        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='Категория - ' + str(c.name), cat_selected=c.pk)
         context = dict(list(context.items()) + list(c_def.items()))
         return context
 
