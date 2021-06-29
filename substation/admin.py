@@ -22,6 +22,7 @@ class TestingAdmin(admin.ModelAdmin):
 
     get_html_photo.short_description = 'Миниатюра'
 
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
